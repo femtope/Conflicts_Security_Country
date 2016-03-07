@@ -50,7 +50,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <header class="main-header">
           <!-- Header Navbar -->
           <nav class="navbar navbar-static-top" role="navigation">
-            <a href="#" class="navbar-brand"><strong class="special-size"><b>Nigeria Conflicts and Security </b> MAP </strong></a>
+            <a href="#" class="navbar-brand"><strong class="special-size"><b><b   id="country"></b>Conflicts and Security </b> MAP </strong></a>
             <!-- Sidebar Toggle Button -->
               <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                   <span class="sr-only">Toggle navigation </span>
@@ -133,8 +133,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 </div>
                   </div>
-            </section>
-            <section class="sidebar">
+             <div class="alert alert-info sideColor">
+                    <h4><i class="icon fa fa-globe"></i>Country of Interest</h4>
+                    <div class="form-group">
+                        <select id="countryScope" onchange="countrySelector()" class="form-control">
+                            <option value="">Select...</option>
+                            <option value="Nigeria">Nigeria</option>
+                            <option value="Guinea">Guinea</option>
+                            <option value="Liberia">Liberia</option>
+                            <option value="Sierra Leone">Sierra Leone</option>
+                        </select>
+                    </div>
+
+                </div>
+            <!--</section>
+            <section class="sidebar">-->
               <div></div>
             </section>
 
@@ -220,76 +233,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
 
               </div>
-            </section>
-
-           <!-- <section class="sidebar">
-
-                <div class="row">
-                  <span>  <div class="col-md-2">
-                              <div class="progress-bar progress sm One-color" style="width: 100%"></div>
-                          </div>
-                  </span>
-                  <span class="info-box-number white"><small class="pad">Civil Conflicts</small></span>
-                </div>
-                <div class="row">
-                    <span>  <div class="col-md-2">
-                                <div class="progress-bar progress sm Two-color" style="width: 100%"></div>
-                            </div>
-                    </span>
-                    <span class="info-box-number white"><small class="pad">Kidnapping/Abduction</small></span>
-                </div>
-                <div class="row">
-                    <span>  <div class="col-md-2">
-                                <div class="progress-bar progress sm Three-color" style="width: 100%"></div>
-                            </div>
-                    </span>
-                    <span class="info-box-number white"><small class="pad">Assassination/Homicide/</small></span>
-                    <span class="info-box-number white"><small class="pad">Armed Robbery/Arm Assault</small> </span>
-                    <div class="row"></div>
-                </div>
-
-                <div class="row"></div>
-
-                <div class="row">
-                    <span>  <div class="col-md-2">
-                                <div class="progress-bar progress sm Four-color" style="width: 100%"></div>
-                            </div>
-                    </span>
-                    <span class="info-box-number white"><small class="pad">Insurgency/Terrorists Attacks</small></span>
-                </div>
-
-              <div class="row">
-                    <span>  <div class="col-md-2">
-                                <div class="progress-bar progress sm Five-color" style="width: 100%"></div>
-                            </div>
-                    </span>
-                    <span class="info-box-number white"><small class="pad">Religious Conflicts</small></span>
-              </div>
-
-              <div class="row">
-                    <span>  <div class="col-md-2">
-                                <div class="progress-bar progress sm Six-color" style="width: 100%"></div>
-                            </div>
-                    </span>
-                    <span class="info-box-number white"><small class="pad">Protests/Demonstrations</small></span>
-              </div>
-
-
-                <div class="row">
-                    <span>  <div class="col-md-2">
-                                <div class="progress-bar progress sm Seven-color" style="width: 100%"></div>
-                            </div>
-                    </span>
-                    <span class="info-box-number white"><small class="pad">Others</small></span>
-                </div>
-
-            </section>
--->
-
-            <section>
-                <div class="row"></div>
-                <div class="alert alert-info sideColor">
-
+                 <div class="alert alert-info sideColor">
                     <div class="box box-primary box-solid">
                         <div class="box-header with-border">
                             <h3 class="box-title">Details</h3>

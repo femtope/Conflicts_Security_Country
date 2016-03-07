@@ -65,11 +65,25 @@ function adjustLayerbyZoom(zoomLevel) {
 
 }
 
+// var infoContent = buildPopupContent(feature)
+        //console.log("info", infoContent)
+   // $('#infoContent').html(infoContent)
+
+
+function countrySelector() {
+  countrySelect = $('#countryScope').val()
+  var country = countrySelect.concat(" ")
+  $('#country').html(country)
+  console.log("Country is: ", countrySelect)
+
+}
+
 function triggerUiUpdate() {
     conflictScenario = $('#categoryScope').val()
     monthSelect = $('#monthScope').val()
     yr = $("#amount").val();
     yrs = yr.split('  -  ');
+    country = $('#countryScope').val()
 
     var query = buildQuery(monthSelect, yrs, conflictScenario)
     console.log("QUERY:  ",query)

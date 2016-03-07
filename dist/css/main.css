@@ -146,7 +146,7 @@
 }
 
 .detailbox {
-    font-size: 14px;
+    font-size: 13px;
     text-align: justify;
-    overflow: auto;
+    overflow: scroll;
 }
