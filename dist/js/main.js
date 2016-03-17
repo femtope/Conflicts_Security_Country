@@ -5,17 +5,17 @@ var monthSelect = '',
     dataLayer = null,
     markerGroup = null,
     stateData = null,
-    stateLayer, lgaLayer,
+    guineaAdminLayer1, guineaAdminLayer2, liberiaAdminLayer1, liberiaAdminLayer2, sleAdminLayer1, sleAdminLayer2
     lgaLabels = [],
-    showLga = false,
+    showAdminLayer2 = false,
     country = ''
 
 
 var map = L.map('map', {
     center: [11.5, -9.9],
     zoom: 7,
-    zoomControl: false,
-    minZoom: 6
+    zoomControl: false
+    //minZoom: 6
 
 });
 
@@ -52,21 +52,25 @@ L.control.scale({
 function adjustLayerbyZoom(zoomLevel) {
 
     if (zoomLevel > 8) {
-        if (!showLga) {
-            map.addLayer(lgaLayer)
-                //Add labels to the LGAs
+        if (!showAdminLayer2) {
+            map.addLayer(guineaAdminLayer2)
+            map.addLayer(liberiaAdminLayer2)
+            map.addLayer(sleAdminLayer2)
+                //Add labels to the Admin2
             for (var i = 0; i < lgaLabels.length; i++) {
                 lgaLabels[i].addTo(map)
             }
-            showLga = true
+            showAdminLayer2 = true
         }
     } else {
-        map.removeLayer(lgaLayer)
+        map.removeLayer(guineaAdminLayer2)
+        map.removeLayer(liberiaAdminLayer2)
+        map.removeLayer(sleAdminLayer2)
         for (var i = 0; i < lgaLabels.length; i++) {
             map.removeLayer(lgaLabels[i])
         }
 
-        showLga = false
+        showAdminLayer2 = false
     }
 
 }
@@ -85,6 +89,7 @@ function adjustLayerbyZoom(zoomLevel) {
 }*/
 
 function triggerUiUpdate() {
+    getAdminLayers()
     countrySelect = $('#countryScope').val()
     country = countrySelect.concat(" ")
     $('#country').html(country)
@@ -93,15 +98,20 @@ function triggerUiUpdate() {
     // Working on Coiuntry Selection and Zooming to Each Country
     if(countrySelect == "Guinea") {
         map.setView([10.6, -13.8], 7, {animation: true})
+        map.addLayer(guineaAdminLayer1)
     }
 
     if(countrySelect == "Liberia") {
         map.setView([6.5, -10.5], 7, {animation: true})
+        map.addLayer(liberiaAdminLayer1)
+        //map.removeLayer(guineaAdminLayer1)
     }
 
 
     if(countrySelect == "Sierra Leone") {
-        map.setView([8.5, -12], 8, {animation: true})
+        map.setView([8.5, -12], 7, {animation: true})
+        map.addLayer(sleAdminLayer1)
+
     }
 
 
@@ -114,7 +124,7 @@ function triggerUiUpdate() {
     var query = buildQuery(monthSelect, yrs, conflictScenario)
     console.log("QUERY:  ",query)
     getData(query)
-    map.setZoom(6)
+   // map.setZoom(6)
 }
 
 
@@ -270,33 +280,70 @@ function addDataToMap(geoData) {
 
 function addAdminLayersToMap(layers) {
     var layerStyles = {
-            'state': {
+            'admin1': {
                 "clickable": true,
                 "color": '#B81609',
                 "fillColor": '#FFFFFF',
                 "weight": 1.5,
-                "opacity": 0.2,
+                "opacity": 0.5,
                 "fillOpacity": 0.1
             },
-            'lga': {
+            'admin2': {
                 "clickable": true,
-                "color": '#A52A2A',
+                "color": '#412406',
                 "fillColor": '#FFFFFF',
                 "weight": 1.5,
-                "opacity": 0.4,
+                "opacity": 0.7,
                 "fillOpacity": 0.1
             }
       }
 
-    stateLayer = L.geoJson(layers['state'], {
-        style: layerStyles['state']
-    }).addTo(map)
-    lgaLayer = L.geoJson(layers['lga'], {
-        style: layerStyles['lga'],
+    guineaAdminLayer1 = L.geoJson(layers['guineaAdmin1'], {
+        style: layerStyles['admin1']
+    })
+
+    liberiaAdminLayer1 = L.geoJson(layers['liberiaAdmin1'], {
+        style: layerStyles['admin1']
+    })
+
+    sleAdminLayer1 = L.geoJson(layers['sleAdmin1'], {
+        style: layerStyles['admin1']
+    })
+
+    guineaAdminLayer2 = L.geoJson(layers['guineaAdmin2'], {
+        style: layerStyles['admin2'],
         onEachFeature: function (feature, layer) {
             var labelIcon = L.divIcon({
                 className: 'labelLga-icon',
-                html: feature.properties.LGAName
+                html: feature.properties.NAME_2
+            })
+            lgaLabels.push(L.marker(layer.getBounds().getCenter(), {
+                    icon: labelIcon
+                }))
+
+        }
+    })
+
+    liberiaAdminLayer2 = L.geoJson(layers['liberiaAdmin2'], {
+        style: layerStyles['admin2'],
+        onEachFeature: function (feature, layer) {
+            var labelIcon = L.divIcon({
+                className: 'labelLga-icon',
+                html: feature.properties.NAME_2
+            })
+            lgaLabels.push(L.marker(layer.getBounds().getCenter(), {
+                    icon: labelIcon
+                }))
+
+        }
+    })
+
+    sleAdminLayer2 = L.geoJson(layers['sleAdmin2'], {
+        style: layerStyles['admin2'],
+        onEachFeature: function (feature, layer) {
+            var labelIcon = L.divIcon({
+                className: 'labelLga-icon',
+                html: feature.properties.NAME_2
             })
             lgaLabels.push(L.marker(layer.getBounds().getCenter(), {
                     icon: labelIcon
@@ -355,28 +402,61 @@ function getData(queryUrl) {
 }
 
 function getAdminLayers() {
-    showLoader()
+    //showLoader()
     var adminLayers = {}
-    $.get('resources/state_boundary.geojson', function (stateData) {
-        //add admin layers to map
-        adminLayers['state'] = JSON.parse(stateData)
-        $.get('resources/lga_boundary.geojson', function (lgaData) {
-            adminLayers['lga'] = JSON.parse(lgaData)
-                //return the layers
-            addAdminLayersToMap(adminLayers)
-        }).fail(function () {
+
+    //Add Admin Layers to Map
+    $.get('resources/GIN_Admin1.geojson', function (guinea_admin1) {
+        adminLayers['guineaAdmin1'] = JSON.parse(guinea_admin1)
+        addAdminLayersToMap(adminLayers)
+		}).fail(function () {
             logError(null)
         })
 
-    }).fail(function () {
-        logError(null) //TODO: Fix this terrible code
-    })
+      $.get('resources/LBR_Admin1.geojson', function (liberia_admin1) {
+        adminLayers['liberiaAdmin1'] = JSON.parse(liberia_admin1)
+        addAdminLayersToMap(adminLayers)
+		}).fail(function () {
+            logError(null)
+        })
+
+     $.get('resources/SLE_Admin1.geojson', function (sle_admin1) {
+        adminLayers['sleAdmin1'] = JSON.parse(sle_admin1)
+        addAdminLayersToMap(adminLayers)
+		}).fail(function () {
+            logError(null)
+        })
+
+        $.get('resources/GIN_Admin2.geojson', function (guinea_admin2) {
+        adminLayers['guineaAdmin2'] = JSON.parse(guinea_admin2)
+        addAdminLayersToMap(adminLayers)
+		}).fail(function () {
+            logError(null)
+        })
+
+        $.get('resources/LBR_Admin2.geojson', function (liberia_admin2) {
+        adminLayers['liberiaAdmin2'] = JSON.parse(liberia_admin2)
+        addAdminLayersToMap(adminLayers)
+		}).fail(function () {
+            logError(null)
+        })
+
+        $.get('resources/SLE_Admin2.geojson', function (sle_admin2) {
+        adminLayers['sleAdmin2'] = JSON.parse(sle_admin2)
+        addAdminLayersToMap(adminLayers)
+		}).fail(function () {
+            logError(null)
+        })
+
+
+
+
 }
 
 function logError(error) {
     console.log("error!")
 }
 
-getAdminLayers()
+/*getAdminLayers()*/
 hideLoader()
 /*triggerUiUpdate()*/
