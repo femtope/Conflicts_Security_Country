@@ -12,13 +12,18 @@ var monthSelect = '',
 
 
 var map = L.map('map', {
-    center: [10, 8],
-    zoom: 8,
+    center: [11.5, -9.9],
+    zoom: 7,
     zoomControl: false,
     minZoom: 6
 
 });
 
+
+/*//Nigeria
+map.fitBounds([
+    [2.668432, 4.277144], [14.680073, 13.892007]
+])*/
 
 
 
@@ -26,6 +31,8 @@ map.on('zoomend', function () {
     adjustLayerbyZoom(map.getZoom())
 })
 
+//'https://maps.nlp.nokia.com/maptiler/v2/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=eng&token=61YWYROufLu_f8ylE0vn0Q&app_id=qIWDkliFCtLntLma2e6O'
+//'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18
@@ -82,6 +89,20 @@ function triggerUiUpdate() {
     country = countrySelect.concat(" ")
     $('#country').html(country)
     console.log("Country is: ", countrySelect)
+
+    // Working on Coiuntry Selection and Zooming to Each Country
+    if(countrySelect == "Guinea") {
+        map.setView([10.6, -13.8], 7, {animation: true})
+    }
+
+    if(countrySelect == "Liberia") {
+        map.setView([6.5, -10.5], 7, {animation: true})
+    }
+
+
+    if(countrySelect == "Sierra Leone") {
+        map.setView([8.5, -12], 8, {animation: true})
+    }
 
 
     conflictScenario = $('#categoryScope').val()
