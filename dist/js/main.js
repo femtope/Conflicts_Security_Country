@@ -7,7 +7,8 @@ var monthSelect = '',
     stateData = null,
     stateLayer, lgaLayer,
     lgaLabels = [],
-    showLga = false
+    showLga = false,
+    country = ''
 
 
 var map = L.map('map', {
@@ -19,9 +20,7 @@ var map = L.map('map', {
 });
 
 
-map.fitBounds([
-    [2.668432, 4.277144], [14.680073, 13.892007]
-])
+
 
 map.on('zoomend', function () {
     adjustLayerbyZoom(map.getZoom())
@@ -70,15 +69,21 @@ function adjustLayerbyZoom(zoomLevel) {
    // $('#infoContent').html(infoContent)
 
 
-function countrySelector() {
+/*function countrySelector() {
   countrySelect = $('#countryScope').val()
-  var country = countrySelect.concat(" ")
+  country = countrySelect.concat(" ")
   $('#country').html(country)
   console.log("Country is: ", countrySelect)
 
-}
+}*/
 
 function triggerUiUpdate() {
+    countrySelect = $('#countryScope').val()
+    country = countrySelect.concat(" ")
+    $('#country').html(country)
+    console.log("Country is: ", countrySelect)
+
+
     conflictScenario = $('#categoryScope').val()
     monthSelect = $('#monthScope').val()
     yr = $("#amount").val();
@@ -95,7 +100,9 @@ function triggerUiUpdate() {
 
 function buildQuery(monthSelect, yearRange, conflictScenario) {
   var needsAnd = false;
-  query = 'http://ehealthafrica.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM conflict_and_security_data';
+
+  if(country == "Nigeria") {
+    query = 'http://ehealthafrica.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM conflict_and_security_data';
   if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0){
     query = query.concat(' WHERE')
     if (conflictScenario.length > 0){
@@ -113,8 +120,22 @@ function buildQuery(monthSelect, yearRange, conflictScenario) {
 
     else query = 'http://ehealthafrica.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM conflict_and_security_data';
   }
-  return query
 
+  }
+
+  if(country == "Liberia") {
+
+
+  }
+  if(country == "Guinea") {
+
+
+  }
+  if(country == "Sierra Leone") {
+
+
+  }
+  return query
 }
 
 //TODO: fix the issue of lga layer not reoving after data filtering
@@ -336,4 +357,5 @@ function logError(error) {
 }
 
 getAdminLayers()
-triggerUiUpdate()
+hideLoader()
+/*triggerUiUpdate()*/

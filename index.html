@@ -125,7 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 <div class="alert alert-info sidecolor">
                   <div class="row">
-                      <h3 class="white text-center"><i class="icon fa fa-spinner"></i></h3>
+                      <h3 class="white text-center"></h3>
                   </div>
                 <div class="text-center">
                     <span class="info-box-text white">Currently Displaying:</span>
@@ -136,9 +136,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
              <div class="alert alert-info sideColor">
                     <h4><i class="icon fa fa-globe"></i>Country of Interest</h4>
                     <div class="form-group">
-                        <select id="countryScope" onchange="countrySelector()" class="form-control">
+                        <select id="countryScope" onchange="triggerUiUpdate()" class="form-control">
                             <option value="">Select...</option>
-                            <option value="Nigeria">Nigeria</option>
+                            <!--<option value="Nigeria">Nigeria</option>-->
                             <option value="Guinea">Guinea</option>
                             <option value="Liberia">Liberia</option>
                             <option value="Sierra Leone">Sierra Leone</option>
@@ -264,6 +264,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 </div>
                 <!-- Your Page Content Here -->
+
+                <div>
+                  <h7 class="red text-center"><i class="icon fa fa-spinner fa-5x" id="spinposition"></i></h7>
+                </div>
 
             </section>
             <!-- /.content -->
