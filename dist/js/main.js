@@ -28,7 +28,9 @@ map.fitBounds([
 
 
 map.on('zoomend', function () {
-    adjustLayerbyZoom(map.getZoom())
+    adjustLayerbyZoom1(map.getZoom())
+    adjustLayerbyZoom2(map.getZoom())
+    adjustLayerbyZoom3(map.getZoom())
 })
 
 //'https://maps.nlp.nokia.com/maptiler/v2/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=eng&token=61YWYROufLu_f8ylE0vn0Q&app_id=qIWDkliFCtLntLma2e6O'
@@ -49,13 +51,11 @@ L.control.scale({
     updateWhenIdle: true
 }).addTo(map);
 
-function adjustLayerbyZoom(zoomLevel) {
+function adjustLayerbyZoom1(zoomLevel) {
 
     if (zoomLevel > 8) {
         if (!showAdminLayer2) {
             map.addLayer(guineaAdminLayer2)
-            map.addLayer(liberiaAdminLayer2)
-            map.addLayer(sleAdminLayer2)
                 //Add labels to the Admin2
             for (var i = 0; i < lgaLabels.length; i++) {
                 lgaLabels[i].addTo(map)
@@ -64,7 +64,49 @@ function adjustLayerbyZoom(zoomLevel) {
         }
     } else {
         map.removeLayer(guineaAdminLayer2)
+        for (var i = 0; i < lgaLabels.length; i++) {
+            map.removeLayer(lgaLabels[i])
+        }
+
+        showAdminLayer2 = false
+    }
+
+}
+
+function adjustLayerbyZoom2(zoomLevel) {
+
+    if (zoomLevel > 8) {
+        if (!showAdminLayer2) {
+            map.addLayer(liberiaAdminLayer2)
+                //Add labels to the Admin2
+            for (var i = 0; i < lgaLabels.length; i++) {
+                lgaLabels[i].addTo(map)
+            }
+            showAdminLayer2 = true
+        }
+    } else {
         map.removeLayer(liberiaAdminLayer2)
+        for (var i = 0; i < lgaLabels.length; i++) {
+            map.removeLayer(lgaLabels[i])
+        }
+
+        showAdminLayer2 = false
+    }
+
+}
+
+function adjustLayerbyZoom3(zoomLevel) {
+
+    if (zoomLevel > 8) {
+        if (!showAdminLayer2) {
+           map.addLayer(sleAdminLayer2)
+                //Add labels to the Admin2
+            for (var i = 0; i < lgaLabels.length; i++) {
+                lgaLabels[i].addTo(map)
+            }
+            showAdminLayer2 = true
+        }
+    } else {
         map.removeLayer(sleAdminLayer2)
         for (var i = 0; i < lgaLabels.length; i++) {
             map.removeLayer(lgaLabels[i])
@@ -75,21 +117,9 @@ function adjustLayerbyZoom(zoomLevel) {
 
 }
 
-// var infoContent = buildPopupContent(feature)
-        //console.log("info", infoContent)
-   // $('#infoContent').html(infoContent)
-
-
-/*function countrySelector() {
-  countrySelect = $('#countryScope').val()
-  country = countrySelect.concat(" ")
-  $('#country').html(country)
-  console.log("Country is: ", countrySelect)
-
-}*/
 
 function triggerUiUpdate() {
-    getAdminLayers()
+   /* getAdminLayers()*/
     countrySelect = $('#countryScope').val()
     country = countrySelect.concat(" ")
     $('#country').html(country)
@@ -99,18 +129,23 @@ function triggerUiUpdate() {
     if(countrySelect == "Guinea") {
         map.setView([10.6, -13.8], 7, {animation: true})
         map.addLayer(guineaAdminLayer1)
+        map.removeLayer(liberiaAdminLayer1)
+        map.removeLayer(sleAdminLayer1)
     }
 
     if(countrySelect == "Liberia") {
         map.setView([6.5, -10.5], 7, {animation: true})
         map.addLayer(liberiaAdminLayer1)
-        //map.removeLayer(guineaAdminLayer1)
+        map.removeLayer(guineaAdminLayer1)
+        map.removeLayer(sleAdminLayer1)
     }
 
 
     if(countrySelect == "Sierra Leone") {
         map.setView([8.5, -12], 7, {animation: true})
         map.addLayer(sleAdminLayer1)
+        map.removeLayer(guineaAdminLayer1)
+        map.removeLayer(liberiaAdminLayer1)
 
     }
 
@@ -402,7 +437,7 @@ function getData(queryUrl) {
 }
 
 function getAdminLayers() {
-    //showLoader()
+    showLoader()
     var adminLayers = {}
 
     //Add Admin Layers to Map
@@ -457,6 +492,6 @@ function logError(error) {
     console.log("error!")
 }
 
-/*getAdminLayers()*/
+getAdminLayers()
 hideLoader()
 /*triggerUiUpdate()*/
