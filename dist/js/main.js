@@ -5,15 +5,15 @@ var monthSelect = '',
     dataLayer = null,
     markerGroup = null,
     stateData = null,
-    guineaAdminLayer1, guineaAdminLayer2, liberiaAdminLayer1, liberiaAdminLayer2, sleAdminLayer1, sleAdminLayer2
-    lgaLabels = [],
-    showAdminLayer2 = false,
+    guineaAdminLayer1, guineaAdminLayer2, liberiaAdminLayer1, liberiaAdminLayer2, sleAdminLayer1, sleAdminLayer2,
+    GINLabels = [], LBRLabels = [], SLELabels = [],
+    GINAdmin2 = false, SLEAdmin2 = false, LBRAdmin2 = false,
     country = ''
 
 
 var map = L.map('map', {
-    center: [11.5, -9.9],
-    zoom: 7,
+    center: [14, -5],
+    zoom: 4,
     zoomControl: false
     //minZoom: 6
 
@@ -27,11 +27,11 @@ map.fitBounds([
 
 
 
-map.on('zoomend', function () {
+/*map.on('zoomend', function () {
     adjustLayerbyZoom1(map.getZoom())
     adjustLayerbyZoom2(map.getZoom())
     adjustLayerbyZoom3(map.getZoom())
-})
+})*/
 
 //'https://maps.nlp.nokia.com/maptiler/v2/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=eng&token=61YWYROufLu_f8ylE0vn0Q&app_id=qIWDkliFCtLntLma2e6O'
 //'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -51,68 +51,76 @@ L.control.scale({
     updateWhenIdle: true
 }).addTo(map);
 
-function adjustLayerbyZoom1(zoomLevel) {
+function adjustLayerbyZoom1(zoomGIN) {
 
-    if (zoomLevel > 8) {
-        if (!showAdminLayer2) {
+    if (zoomGIN > 8) {
+        if (!GINAdmin2) {
+            map.removeLayer(liberiaAdminLayer2)
+            map.removeLayer(sleAdminLayer2)
             map.addLayer(guineaAdminLayer2)
                 //Add labels to the Admin2
-            for (var i = 0; i < lgaLabels.length; i++) {
-                lgaLabels[i].addTo(map)
+            for (var i = 0; i < GINLabels.length; i++) {
+                GINLabels[i].addTo(map)
+
             }
-            showAdminLayer2 = true
+            GINAdmin2 = true
         }
     } else {
         map.removeLayer(guineaAdminLayer2)
-        for (var i = 0; i < lgaLabels.length; i++) {
-            map.removeLayer(lgaLabels[i])
+        for (var i = 0; i < GINLabels.length; i++) {
+            map.removeLayer(GINLabels[i])
+
         }
 
-        showAdminLayer2 = false
+        GINAdmin2 = false
     }
 
 }
 
-function adjustLayerbyZoom2(zoomLevel) {
+function adjustLayerbyZoom2(zoomLBR) {
 
-    if (zoomLevel > 8) {
-        if (!showAdminLayer2) {
+    if (zoomLBR > 8) {
+        if (!LBRAdmin2) {
+            map.removeLayer(guineaAdminLayer2)
+            map.removeLayer(sleAdminLayer2)
             map.addLayer(liberiaAdminLayer2)
                 //Add labels to the Admin2
-            for (var i = 0; i < lgaLabels.length; i++) {
-                lgaLabels[i].addTo(map)
+            for (var i = 0; i < LBRLabels.length; i++) {
+                LBRLabels[i].addTo(map)
             }
-            showAdminLayer2 = true
+            LBRAdmin2 = true
         }
     } else {
         map.removeLayer(liberiaAdminLayer2)
-        for (var i = 0; i < lgaLabels.length; i++) {
-            map.removeLayer(lgaLabels[i])
+        for (var i = 0; i < LBRLabels.length; i++) {
+            map.removeLayer(LBRLabels[i])
         }
 
-        showAdminLayer2 = false
+        LBRAdmin2 = false
     }
 
 }
 
-function adjustLayerbyZoom3(zoomLevel) {
+function adjustLayerbyZoom3(zoomSLE) {
 
-    if (zoomLevel > 8) {
-        if (!showAdminLayer2) {
-           map.addLayer(sleAdminLayer2)
+    if (zoomSLE > 8) {
+        if (!SLEAdmin2) {
+          map.removeLayer(liberiaAdminLayer2)
+          map.removeLayer(guineaAdminLayer2)
+          map.addLayer(sleAdminLayer2)
                 //Add labels to the Admin2
-            for (var i = 0; i < lgaLabels.length; i++) {
-                lgaLabels[i].addTo(map)
+            for (var i = 0; i < SLELabels.length; i++) {
+                SLELabels[i].addTo(map)
             }
-            showAdminLayer2 = true
+            SLEAdmin2 = true
         }
     } else {
         map.removeLayer(sleAdminLayer2)
-        for (var i = 0; i < lgaLabels.length; i++) {
-            map.removeLayer(lgaLabels[i])
+        for (var i = 0; i < SLELabels.length; i++) {
+            map.removeLayer(SLELabels[i])
         }
 
-        showAdminLayer2 = false
+        SLEAdmin2 = false
     }
 
 }
@@ -125,12 +133,15 @@ function triggerUiUpdate() {
     $('#country').html(country)
     console.log("Country is: ", countrySelect)
 
-    // Working on Coiuntry Selection and Zooming to Each Country
+    // Working on Country Selection and Zooming to Each Country
     if(countrySelect == "Guinea") {
         map.setView([10.6, -13.8], 7, {animation: true})
         map.addLayer(guineaAdminLayer1)
         map.removeLayer(liberiaAdminLayer1)
         map.removeLayer(sleAdminLayer1)
+        map.on('zoomend', function () {
+          adjustLayerbyZoom1(map.getZoom())
+        })
     }
 
     if(countrySelect == "Liberia") {
@@ -138,6 +149,10 @@ function triggerUiUpdate() {
         map.addLayer(liberiaAdminLayer1)
         map.removeLayer(guineaAdminLayer1)
         map.removeLayer(sleAdminLayer1)
+        map.on('zoomend', function () {
+          adjustLayerbyZoom2(map.getZoom())
+        })
+
     }
 
 
@@ -146,8 +161,11 @@ function triggerUiUpdate() {
         map.addLayer(sleAdminLayer1)
         map.removeLayer(guineaAdminLayer1)
         map.removeLayer(liberiaAdminLayer1)
+        map.on('zoomend', function () {
+          adjustLayerbyZoom3(map.getZoom())
+        })
 
-    }
+      }
 
 
     conflictScenario = $('#categoryScope').val()
@@ -167,12 +185,12 @@ function triggerUiUpdate() {
 function buildQuery(monthSelect, yearRange, conflictScenario) {
   var needsAnd = false;
 
-  if(country == "Nigeria") {
-    query = 'http://ehealthafrica.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM conflict_and_security_data';
+  if(country == "Sierra Leone") {
+    query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM sierra_leone_conflict_data';
   if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0){
     query = query.concat(' WHERE')
     if (conflictScenario.length > 0){
-      query = query.concat(" conflict_scenario = '".concat(conflictScenario.concat("'")))
+      query = query.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
       needsAnd = true
     }
     if (monthSelect.length > 0){
@@ -184,27 +202,58 @@ function buildQuery(monthSelect, yearRange, conflictScenario) {
       query = needsAnd  ? query.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : query = query.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
     }
 
-    else query = 'http://ehealthafrica.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM conflict_and_security_data';
+    else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM sierra_leone_conflict_data';
   }
 
   }
 
-  if(country == "Liberia") {
 
+  else if(country == "Guinea") {
+    query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM guinea_conflict_data';
+  if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0){
+    query = query.concat(' WHERE')
+    if (conflictScenario.length > 0){
+      query = query.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
+      needsAnd = true
+    }
+    if (monthSelect.length > 0){
+      query = needsAnd  ? query.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  query.concat(" event_month = '".concat(monthSelect.concat("'")))
+      needsAnd = true
+    }
 
+    if (yearRange.length > 1){
+      query = needsAnd  ? query.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : query = query.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
+    }
+
+    else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM guinea_conflict_data';
   }
-  if(country == "Guinea") {
+}
 
+  else if(country == "Liberia") {
+     query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM liberia_conflict_data';
+  if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0){
+    query = query.concat(' WHERE')
+    if (conflictScenario.length > 0){
+      query = query.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
+      needsAnd = true
+    }
+    if (monthSelect.length > 0){
+      query = needsAnd  ? query.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  query.concat(" event_month = '".concat(monthSelect.concat("'")))
+      needsAnd = true
+    }
 
+    if (yearRange.length > 1){
+      query = needsAnd  ? query.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : query = query.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
+    }
+
+    else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM liberia_conflict_data';
   }
-  if(country == "Sierra Leone") {
-
-
-  }
+}
   return query
 }
 
-//TODO: fix the issue of lga layer not reoving after data filtering
+
+
 function addDataToMap(geoData) {
     // adjustLayerbyZoom(map.getZoom())
     //remove all layers first
@@ -292,7 +341,7 @@ function addDataToMap(geoData) {
         //console.log("geoData", geoData)
     dataLayer = L.geoJson(geoData, {
         pointToLayer: function (feature, latlng) {
-            var marker = L.circleMarker(latlng, allColours[feature.properties.conflict_scenario])
+            var marker = L.circleMarker(latlng, allColours[feature.properties.conflicts_scenario])
                 //markerGroup.addLayer(marker);
             return marker
         },
@@ -352,7 +401,7 @@ function addAdminLayersToMap(layers) {
                 className: 'labelLga-icon',
                 html: feature.properties.NAME_2
             })
-            lgaLabels.push(L.marker(layer.getBounds().getCenter(), {
+            GINLabels.push(L.marker(layer.getBounds().getCenter(), {
                     icon: labelIcon
                 }))
 
@@ -366,7 +415,7 @@ function addAdminLayersToMap(layers) {
                 className: 'labelLga-icon',
                 html: feature.properties.NAME_2
             })
-            lgaLabels.push(L.marker(layer.getBounds().getCenter(), {
+            LBRLabels.push(L.marker(layer.getBounds().getCenter(), {
                     icon: labelIcon
                 }))
 
@@ -380,7 +429,7 @@ function addAdminLayersToMap(layers) {
                 className: 'labelLga-icon',
                 html: feature.properties.NAME_2
             })
-            lgaLabels.push(L.marker(layer.getBounds().getCenter(), {
+            SLELabels.push(L.marker(layer.getBounds().getCenter(), {
                     icon: labelIcon
                 }))
 
@@ -407,7 +456,7 @@ function normalizeName(source) {
 
 function buildPopupContent(feature) {
     var subcontent = ''
-    var propertyNames = ['event_type', 'event_year', 'event_month', 'event_date', 'state', 'lga', 'location', 'source', 'perpetrator', 'notes', 'fatalities', 'conflict_scenario']
+    var propertyNames = ['event_type', 'event_year', 'event_month', 'event_date', 'admin1', 'admin2', 'admin3', 'location', 'source', 'perpetrator', 'notes', 'fatalities', 'conflicts_scenario']
     for (var i = 0; i < propertyNames.length; i++) {
         subcontent = subcontent.concat('<p><strong>' + normalizeName(propertyNames[i]) + ': </strong>' + feature.properties[propertyNames[i]] + '</p>')
 
