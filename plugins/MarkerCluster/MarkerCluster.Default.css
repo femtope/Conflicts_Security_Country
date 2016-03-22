@@ -1,25 +1,25 @@
 .marker-cluster-small {
-    background-color: rgba(255, 167, 140, 0.5);
+    background-color: rgba(255, 204, 153, 0.9);
 }
 
 .marker-cluster-small div {
-    background-color: rgba(255, 255, 224, 1.2);
+    background-color: rgba(255, 255, 255, 10);
 }
 
 .marker-cluster-medium {
-    background-color: rgba(255, 167, 140, 0.5);
+    background-color: rgba(255, 204, 153, 0.9);
 }
 
 .marker-cluster-medium div {
-    background-color: rgba(255, 255, 224, 1.2);
+    background-color: rgba(255, 255, 255, 10);
 }
 
 .marker-cluster-large {
-    background-color: rgba(255, 167, 140, 0.5);
+    background-color: rgba(255, 204, 153, 0.9);
 }
 
 .marker-cluster-large div {
-    background-color: rgba(255, 255, 224, 1.2);
+    background-color: rgba(255, 255, 255, 10);
 }
 
 .marker-cluster {
@@ -35,7 +35,7 @@
     text-align: center;
     border-radius: 15px;
     /*font: bold 16px "Agency FB", Arial, Helvetica, sans-serif;*/
-    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Agnecy FB','Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
     font-weight: bold;
     font-size: 14px;
 }
