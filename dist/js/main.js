@@ -729,9 +729,6 @@ function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
 
 function callAdjoining() {
 
-    /*countrySelect2 = $('#countryScope').val()
-    country2 = countrySelect2.concat(" ")
-    $('#country2').html(country2)*/
     console.log("Testing Country: ", country2)
     var queryAd = adjoiningCountry(monthSelect, yrs, conflictScenario, country)
     console.log("QUERY Country:  ", queryAd)
