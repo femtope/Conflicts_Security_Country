@@ -53,7 +53,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <header class="main-header">
           <!-- Header Navbar -->
           <nav class="navbar navbar-static-top" role="navigation">
-            <a href="#" class="navbar-brand"><strong class="special-size"><b><b   id="country"></b>Conflicts and Security </b> MAP </strong></a>
+            <a href="#" class="navbar-brand"><strong class="special-size"><b><b id="country"></b>Conflicts and Security </b> MAP </strong></a>
             <!-- Sidebar Toggle Button -->
               <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                   <span class="sr-only">Toggle navigation </span>
@@ -67,8 +67,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <select id="categoryScope" onchange="triggerUiUpdate()" class="form-control">
                             <option value="">All</option>
                             <option value="Civil Conflicts">Civil Conflicts</option>
-                            <option value="Kidnapping/Abductions">Kidnapping/Abductions</option>
-                            <option value="Assassination/Homicide/Armed Robbery/Arm Assault">Assassination/Homicide/Armed Robbery/Arm Assault</option>
+                            <!--<option value="Kidnapping/Abductions">Kidnapping/Abductions</option>
+                            <option value="Assassination/Homicide/Armed Robbery/Arm Assault">Assassination/Homicide/Armed Robbery/Arm Assault</option>-->
                             <option value="Insurgency/Terrorists Attacks">Insurgency/Terrorists Attacks</option>
                             <option value="Religious Conflicts">Religious Conflicts</option>
                             <option value="Protests/Demonstrations">Protests/Demonstrations</option>
@@ -147,6 +147,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <div class="row">
                       <h3 class="white text-center"></h3>
                   </div>
+                  <div class="row">
+                      <h3 class="white text-center"></h3>
+                  </div>
                 <div class="text-center">
                     <span class="info-box-text white">Currently Displaying:</span>
                     <span class="info-box-number white"><big id="projectCount">0</big> Conflict Issues</span>
@@ -167,6 +170,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                <div class="btnAd">
                   <input type="button" class="special-size2"  value="Adjoining Country(ies)" readonly style="border:1; color:#000000; font-weight:bold; text-align:center" onclick="callAdjoining()">
+                 <div class="white text-center" id="country"></div>
                 </div>
 
                 </div>

@@ -1,9 +1,9 @@
 var monthSelect = '',
     yearRange = [],
     conflictScenario = '',
-    geoData = null,
-    dataLayer = null,
-    markerGroup = null,
+    geoData = null, geoDataAd = null,
+    dataLayer = null, dataLayerAd = null,
+    markerGroup = null, markerGroupAd = null,
     stateData = null,
     guineaAdminLayer1, guineaAdminLayer2, liberiaAdminLayer1, liberiaAdminLayer2, sleAdminLayer1, sleAdminLayer2,
     GINLabels = [], LBRLabels = [], SLELabels = [],
@@ -18,13 +18,6 @@ var map = L.map('map', {
     //minZoom: 6
 
 });
-
-
-/*//Nigeria
-map.fitBounds([
-    [2.668432, 4.277144], [14.680073, 13.892007]
-])*/
-
 
 
 /*map.on('zoomend', function () {
@@ -175,7 +168,7 @@ function triggerUiUpdate() {
     country = $('#countryScope').val()
 
     var query = buildQuery(monthSelect, yrs, conflictScenario)
-    console.log("QUERY:  ",query)
+    console.log("QUERY:  ", query)
     getData(query)
    // map.setZoom(6)
 }
@@ -205,6 +198,7 @@ function buildQuery(monthSelect, yearRange, conflictScenario) {
     else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM sierra_leone_conflict_data';
   }
 
+
   }
 
 
@@ -227,6 +221,7 @@ function buildQuery(monthSelect, yearRange, conflictScenario) {
 
     else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM guinea_conflict_data';
   }
+
 }
 
   else if(country == "Liberia") {
@@ -248,6 +243,7 @@ function buildQuery(monthSelect, yearRange, conflictScenario) {
 
     else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM liberia_conflict_data';
   }
+
 }
   return query
 }
@@ -545,28 +541,148 @@ getAdminLayers()
 hideLoader()
 /*triggerUiUpdate()*/
 
+
+// This sectionhas to do with Adjoining Countries
+function getDataAd(queryUrl) {
+    showLoader()
+    $.post(queryUrl, function (data) {
+        hideLoader()
+        addDataToMapAd(data)
+    }).fail(function () {
+        console.log("error!")
+    });
+}
+
+function addDataToMapAd(geoDataAd) {
+    // adjustLayerbyZoom(map.getZoom())
+    //remove all layers first
+
+    if (dataLayerAd != null)
+        map.removeLayer(dataLayerAd)
+
+    if (markerGroupAd != null)
+        map.removeLayer(markerGroupAd)
+
+
+    var _radius = 12
+    var _outColor = "#fff"
+    var _weight = 1
+    var _opacity = 1
+    var _fillOpacity = 1.0
+
+    var allColours = {
+        'Assassination/Homicide/Armed Robbery/Arm Assault': {
+            radius: _radius,
+            fillColor: "#ffff00",
+            color: _outColor,
+            weight: _weight,
+            opacity: _opacity,
+            fillOpacity: _fillOpacity
+        },
+        'Civil Conflicts': {
+            radius: _radius,
+            fillColor: "#008000",
+            color: _outColor,
+            weight: _weight,
+            opacity: _opacity,
+            fillOpacity: _fillOpacity
+        },
+        'Kidnapping/Abductions': {
+            radius: _radius,
+            fillColor: "#00ffff",
+            color: _outColor,
+            weight: _weight,
+            opacity: _opacity,
+            fillOpacity: _fillOpacity
+        },
+        'Insurgency/Terrorists Attacks': {
+            radius: _radius,
+            fillColor: "#ff0000",
+            color: _outColor,
+            weight: _weight,
+            opacity: _opacity,
+            fillOpacity: _fillOpacity
+        },
+        'Religious Conflicts': {
+            radius: _radius,
+            fillColor: "#800080",
+            color: _outColor,
+            weight: _weight,
+            opacity: _opacity,
+            fillOpacity: _fillOpacity
+        },
+        'Protests/Demonstrations': {
+            radius: _radius,
+            fillColor: "#a52a2a",
+            color: _outColor,
+            weight: _weight,
+            opacity: _opacity,
+            fillOpacity: _fillOpacity
+        },
+        'Others': {
+            radius: _radius,
+            fillColor: "#ff00ff",
+            color: _outColor,
+            weight: _weight,
+            opacity: _opacity,
+            fillOpacity: _fillOpacity
+        }
+    }
+
+
+    $('#projectCountAd').text(geoDataAd.features.length)
+
+    markerGroupAd = L.markerClusterGroup({
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            removeOutsideVisibleBounds: true
+        })
+        //console.log("geoData", geoData)
+    dataLayerAd = L.geoJson(geoDataAd, {
+        pointToLayer: function (feature, latlng) {
+            var markerAd = L.circleMarker(latlng, allColours[feature.properties.conflicts_scenario])
+                //markerGroup.addLayer(marker);
+            return markerAd
+        },
+        onEachFeature: function (feature, layer) {
+            if (feature.properties && feature.properties.cartodb_id) {
+                //layer.bindPopup(buildPopupContent(feature));
+                layer.on('click', function () {
+                    displayInfo(feature)
+                })
+            }
+
+        }
+
+    })
+
+    markerGroupAd.addLayer(dataLayerAd);
+    map.addLayer(markerGroupAd);
+
+}
+
 function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
     var needsAnd = false;
 
   if(country == "Liberia") {
-    query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ivory_coast_conflict_data';
+    queryAd = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ivory_coast_conflict_data';
   if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0 || country.length > 0){
-    query = query.concat(' WHERE')
+    queryAd = queryAd.concat(' WHERE')
     if (conflictScenario.length > 0){
-      query = query.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
+      queryAd = queryAd.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
       needsAnd = true
     }
     if (monthSelect.length > 0){
-      query = needsAnd  ? query.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  query.concat(" event_month = '".concat(monthSelect.concat("'")))
+      queryAd = needsAnd  ? queryAd.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  queryAd.concat(" event_month = '".concat(monthSelect.concat("'")))
       needsAnd = true
     }
 
     if (yearRange.length > 1){
-      query = needsAnd  ? query.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : query = query.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
+      queryAd = needsAnd  ? queryAd.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : queryAd = queryAd.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
     }
 
    if (country.length > 0){
-      query = needsAnd  ? query.concat(" AND country = 'Ivory Coast'") :  query.concat(" AND country = 'Ivory Coast'")
+      queryAd = needsAnd  ? queryAd.concat(" AND country = 'Ivory Coast'") :  queryAd.concat(" AND country = 'Ivory Coast'")
       needsAnd = true
     }
 
@@ -578,24 +694,24 @@ function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
 
 
   else if(country == "Guinea") {
-    query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ivory_coast_conflict_data';
+    queryAd = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ivory_coast_conflict_data';
   if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0 || country.length > 0){
-    query = query.concat(' WHERE')
+    queryAd = queryAd.concat(' WHERE')
     if (conflictScenario.length > 0){
-      query = query.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
+      queryAd = queryAd.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
       needsAnd = true
     }
     if (monthSelect.length > 0){
-      query = needsAnd  ? query.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  query.concat(" event_month = '".concat(monthSelect.concat("'")))
+      queryAd = needsAnd  ? queryAd.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  queryAd.concat(" event_month = '".concat(monthSelect.concat("'")))
       needsAnd = true
     }
 
     if (yearRange.length > 1){
-      query = needsAnd  ? query.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : query = query.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
+      queryAd = needsAnd  ? queryAd.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : queryAd = queryAd.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
     }
 
    if (country.length > 0){
-      query = needsAnd  ? query.concat(" AND country IN('Guinea-Bissau', 'Mali')") :  query.concat(" AND country IN('Guinea-Bissau', 'Mali')")
+      queryAd = needsAnd  ? queryAd.concat(" AND country IN('Guinea-Bissau', 'Mali')") :  queryAd.concat(" AND country IN('Guinea-Bissau', 'Mali')")
       needsAnd = true
     }
 
@@ -605,15 +721,15 @@ function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
 
   }
 
-  return query
+  return queryAd
 
 }
 
 function callAdjoining() {
 
-  var query = adjoiningCountry(monthSelect, yrs, conflictScenario, country)
-   console.log("QUERY Country:  ",query)
-  getData(query)
+  var queryAd = adjoiningCountry(monthSelect, yrs, conflictScenario, country)
+   console.log("QUERY Country:  ", queryAd)
+  getDataAd(queryAd)
 
 
 }
