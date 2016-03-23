@@ -456,7 +456,7 @@ function normalizeName(source) {
 
 function buildPopupContent(feature) {
     var subcontent = ''
-    var propertyNames = ['event_type', 'event_year', 'event_month', 'event_date', 'admin1', 'admin2', 'admin3', 'location', 'source', 'perpetrator', 'notes', 'fatalities', 'conflicts_scenario']
+    var propertyNames = ['country','event_type', 'event_year', 'event_month', 'event_date', 'admin1', 'admin2', 'admin3', 'location', 'source', 'perpetrator', 'notes', 'fatalities', 'conflicts_scenario']
     for (var i = 0; i < propertyNames.length; i++) {
         subcontent = subcontent.concat('<p><strong>' + normalizeName(propertyNames[i]) + ': </strong>' + feature.properties[propertyNames[i]] + '</p>')
 
@@ -544,3 +544,76 @@ function logError(error) {
 getAdminLayers()
 hideLoader()
 /*triggerUiUpdate()*/
+
+function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
+    var needsAnd = false;
+
+  if(country == "Liberia") {
+    query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ivory_coast_conflict_data';
+  if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0 || country.length > 0){
+    query = query.concat(' WHERE')
+    if (conflictScenario.length > 0){
+      query = query.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
+      needsAnd = true
+    }
+    if (monthSelect.length > 0){
+      query = needsAnd  ? query.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  query.concat(" event_month = '".concat(monthSelect.concat("'")))
+      needsAnd = true
+    }
+
+    if (yearRange.length > 1){
+      query = needsAnd  ? query.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : query = query.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
+    }
+
+   if (country.length > 0){
+      query = needsAnd  ? query.concat(" AND country = 'Ivory Coast'") :  query.concat(" AND country = 'Ivory Coast'")
+      needsAnd = true
+    }
+
+   // else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM sierra_leone_conflict_data';
+  }
+
+
+  }
+
+
+  else if(country == "Guinea") {
+    query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ivory_coast_conflict_data';
+  if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0 || country.length > 0){
+    query = query.concat(' WHERE')
+    if (conflictScenario.length > 0){
+      query = query.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
+      needsAnd = true
+    }
+    if (monthSelect.length > 0){
+      query = needsAnd  ? query.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  query.concat(" event_month = '".concat(monthSelect.concat("'")))
+      needsAnd = true
+    }
+
+    if (yearRange.length > 1){
+      query = needsAnd  ? query.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : query = query.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
+    }
+
+   if (country.length > 0){
+      query = needsAnd  ? query.concat(" AND country IN('Guinea-Bissau', 'Mali')") :  query.concat(" AND country IN('Guinea-Bissau', 'Mali')")
+      needsAnd = true
+    }
+
+   // else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM sierra_leone_conflict_data';
+  }
+
+
+  }
+
+  return query
+
+}
+
+function callAdjoining() {
+
+  var query = adjoiningCountry(monthSelect, yrs, conflictScenario, country)
+   console.log("QUERY Country:  ",query)
+  getData(query)
+
+
+}
