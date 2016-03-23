@@ -8,7 +8,7 @@ var monthSelect = '',
     guineaAdminLayer1, guineaAdminLayer2, liberiaAdminLayer1, liberiaAdminLayer2, sleAdminLayer1, sleAdminLayer2,
     GINLabels = [], LBRLabels = [], SLELabels = [],
     GINAdmin2 = false, SLEAdmin2 = false, LBRAdmin2 = false,
-    country = ''
+    country = '', country2 = ''
 
 
 var map = L.map('map', {
@@ -123,7 +123,9 @@ function triggerUiUpdate() {
    /* getAdminLayers()*/
     countrySelect = $('#countryScope').val()
     country = countrySelect.concat(" ")
+    country2 = countrySelect.concat(" Has ")
     $('#country').html(country)
+    $('#country2').html(country2)
     console.log("Country is: ", countrySelect)
 
     // Working on Country Selection and Zooming to Each Country
@@ -727,9 +729,13 @@ function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
 
 function callAdjoining() {
 
-  var queryAd = adjoiningCountry(monthSelect, yrs, conflictScenario, country)
-   console.log("QUERY Country:  ", queryAd)
-  getDataAd(queryAd)
+    /*countrySelect2 = $('#countryScope').val()
+    country2 = countrySelect2.concat(" ")
+    $('#country2').html(country2)*/
+    console.log("Testing Country: ", country2)
+    var queryAd = adjoiningCountry(monthSelect, yrs, conflictScenario, country)
+    console.log("QUERY Country:  ", queryAd)
+    getDataAd(queryAd)
 
 
 }

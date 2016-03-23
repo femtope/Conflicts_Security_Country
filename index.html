@@ -64,7 +64,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="alert alert-info sideColor">
                     <h4 class="special-size1"><i class="icon fa fa-fire"></i>Conflicts Category</h4>
                       <div class="form-group">
-                        <select id="categoryScope" onchange="triggerUiUpdate()" class="form-control">
+                        <select id="categoryScope" onchange="triggerUiUpdate(); callAdjoining()" class="form-control">
                             <option value="">All</option>
                             <option value="Civil Conflicts">Civil Conflicts</option>
                             <!--<option value="Kidnapping/Abductions">Kidnapping/Abductions</option>
@@ -83,7 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <h4 class="special-size1"><i class="icon fa fa-calendar-check-o"></i>Year Ranges</h4>
                   <div class="form-group">
                     <!--<label for="amount"> Year Ranges: </label>-->
-                    <input type="text" id="amount" readonly style="border:1; color:#000000; font-weight:bold; text-align:center" onclick="triggerUIUpdate()">
+                    <input type="text" id="amount" readonly style="border:1; color:#000000; font-weight:bold; text-align:center" onclick="triggerUIUpdate(); callAdjoining()">
                   </div>
                 <div id="slider-range"></div>
 
@@ -94,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                      <div class="alert alert-info sideColor">
                         <h4 class="special-size1"><i class="icon fa fa-calendar-check-o"></i>Month </h4>
                       <div class="form-group">
-                        <select id="monthScope" onchange="triggerUiUpdate()" class="form-control">
+                        <select id="monthScope" onchange="triggerUiUpdate(); callAdjoining()" class="form-control">
                             <option value="">All</option>
                             <option value="January">January</option>
                             <option value="February">February</option>
@@ -152,7 +152,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                 <div class="text-center">
                     <span class="info-box-text white">Currently Displaying:</span>
-                    <span class="info-box-number white"><big id="projectCount">0</big> Conflict Issues</span>
+
+                    <span class="info-box-number white"><b id="country2"></b><big id="projectCount">0</big> Conflict Issues</span>
 
                 </div>
                   </div>
