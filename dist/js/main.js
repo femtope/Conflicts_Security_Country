@@ -8,7 +8,8 @@ var monthSelect = '',
     guineaAdminLayer1, guineaAdminLayer2, liberiaAdminLayer1, liberiaAdminLayer2, sleAdminLayer1, sleAdminLayer2,
     GINLabels = [], LBRLabels = [], SLELabels = [],
     GINAdmin2 = false, SLEAdmin2 = false, LBRAdmin2 = false,
-    country = '', country2 = ''
+    country = '', country2 = '', country3 = '',
+    btnAd
 
 
 var map = L.map('map', {
@@ -124,6 +125,7 @@ function triggerUiUpdate() {
     countrySelect = $('#countryScope').val()
     country = countrySelect.concat(" ")
     country2 = countrySelect.concat(" Has ")
+    country3 = countrySelect.concat("")
     $('#country').html(country)
     $('#country2').html(country2)
     console.log("Country is: ", countrySelect)
@@ -454,7 +456,7 @@ function normalizeName(source) {
 
 function buildPopupContent(feature) {
     var subcontent = ''
-    var propertyNames = ['country','event_type', 'event_year', 'event_month', 'event_date', 'admin1', 'admin2', 'admin3', 'location', 'source', 'perpetrator', 'notes', 'fatalities', 'conflicts_scenario']
+    var propertyNames = ['country','event_type', 'event_year', 'event_month', 'event_date', 'admin1', 'admin2', /*'admin3',*/ 'location', 'source', 'perpetrator', 'notes', 'fatalities', 'conflicts_scenario']
     for (var i = 0; i < propertyNames.length; i++) {
         subcontent = subcontent.concat('<p><strong>' + normalizeName(propertyNames[i]) + ': </strong>' + feature.properties[propertyNames[i]] + '</p>')
 
@@ -545,16 +547,6 @@ hideLoader()
 
 
 // This sectionhas to do with Adjoining Countries
-function getDataAd(queryUrl) {
-    showLoader()
-    $.post(queryUrl, function (data) {
-        hideLoader()
-        addDataToMapAd(data)
-    }).fail(function () {
-        console.log("error!")
-    });
-}
-
 function addDataToMapAd(geoDataAd) {
     // adjustLayerbyZoom(map.getZoom())
     //remove all layers first
@@ -665,8 +657,9 @@ function addDataToMapAd(geoDataAd) {
 
 function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
     var needsAnd = false;
-
+    queryAd = ''
   if(country == "Liberia") {
+
     queryAd = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ivory_coast_conflict_data';
   if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0 || country.length > 0){
     queryAd = queryAd.concat(' WHERE')
@@ -727,12 +720,43 @@ function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
 
 }
 
+function getDataAd(queryUrl) {
+
+
+
+    showLoader()
+    $.post(queryUrl, function (data) {
+        hideLoader()
+        addDataToMapAd(data)
+    }).fail(function () {
+        console.log("error!")
+    });
+}
+
 function callAdjoining() {
+    if (dataLayerAd != null)
+        map.removeLayer(dataLayerAd)
+
+    if (markerGroupAd != null)
+        map.removeLayer(markerGroupAd)
+
 
     console.log("Testing Country: ", country2)
     var queryAd = adjoiningCountry(monthSelect, yrs, conflictScenario, country)
     console.log("QUERY Country:  ", queryAd)
     getDataAd(queryAd)
 
+}
+
+function showBtn() {
+  if(country3.length > 0) {
+    btnAd = document.getElementById("btnAd");
+    btnAd.style.visibility = "visible"
+      /*btnAd.Visible = true*/
+      console.log("Am Here:  ", country2)
+    }
+  else if (country3 == "") {
+    btnAd.style.visibility = "hidden"
+  }
 
 }
