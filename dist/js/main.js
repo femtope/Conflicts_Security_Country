@@ -710,20 +710,22 @@ function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
       needsAnd = true
     }
 
-   // else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM sierra_leone_conflict_data';
-  }
+ }
 
 
   }
 
+  else if (country == "Sierra Leone") {
+   queryAd = "http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ivory_coast_conflict_data WHERE country = 'Sierra Leone'";
+
+    alertSRL();
+
+  }
   return queryAd
 
 }
 
 function getDataAd(queryUrl) {
-
-
-
     showLoader()
     $.post(queryUrl, function (data) {
         hideLoader()
@@ -734,12 +736,13 @@ function getDataAd(queryUrl) {
 }
 
 function callAdjoining() {
-    if (dataLayerAd != null)
+/*    if (dataLayerAd != null)
         map.removeLayer(dataLayerAd)
 
     if (markerGroupAd != null)
-        map.removeLayer(markerGroupAd)
-
+        map.removeLayer(markerGroupAd)*/
+    yr = $("#amount").val();
+    yrs = yr.split('  -  ');
 
     console.log("Testing Country: ", country2)
     var queryAd = adjoiningCountry(monthSelect, yrs, conflictScenario, country)
@@ -753,10 +756,22 @@ function showBtn() {
     btnAd = document.getElementById("btnAd");
     btnAd.style.visibility = "visible"
       /*btnAd.Visible = true*/
-      console.log("Am Here:  ", country2)
+      console.log("Am Here:  ", country3)
     }
   else if (country3 == "") {
     btnAd.style.visibility = "hidden"
   }
 
+}
+
+function clearData () {
+  if (dataLayerAd != null)
+        map.removeLayer(dataLayerAd)
+
+    if (markerGroupAd != null)
+        map.removeLayer(markerGroupAd)
+}
+
+function alertSRL () {
+  alert("There is no Adjoining Country Apart from the two involving Countries of Interest. Thanks!!!")
 }
