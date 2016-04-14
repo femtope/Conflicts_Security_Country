@@ -165,7 +165,10 @@
     text-align: justify;
 
 }
-
+.logo_pad{
+    padding-top: 5px;
+    padding-right: 5px;
+}
 #spinposition {
     position: absolute;
     top: 300px;

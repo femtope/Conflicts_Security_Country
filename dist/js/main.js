@@ -338,7 +338,7 @@ function addDataToMap(geoData) {
             zoomToBoundsOnClick: true,
             removeOutsideVisibleBounds: true
         })
-        //console.log("geoData", geoData)
+
     dataLayer = L.geoJson(geoData, {
         pointToLayer: function (feature, latlng) {
             var marker = L.circleMarker(latlng, allColours[feature.properties.conflicts_scenario])
