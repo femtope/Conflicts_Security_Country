@@ -29,7 +29,6 @@
 .red {
     color: red;
 }
-
 .bg-aqua,
 .callout.callout-info,
 .alert-info,
@@ -175,5 +174,17 @@
     right: 700px;
     width: 100px;
     height: 100px;
+    background: transparent;
+}
+.specsize{
+    font: bold 28px;
+}
+
+#detailPosition{
+    position: absolute;
+    top: 65px;
+    right: 5px;
+    width: 380px;
+    height: 200px;
     background: transparent;
 }

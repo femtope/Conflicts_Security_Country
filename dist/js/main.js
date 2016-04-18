@@ -5,9 +5,9 @@ var monthSelect = '',
     dataLayer = null, dataLayerAd = null,
     markerGroup = null, markerGroupAd = null,
     stateData = null,
-    guineaAdminLayer1, guineaAdminLayer2, liberiaAdminLayer1, liberiaAdminLayer2, sleAdminLayer1, sleAdminLayer2,
-    GINLabels = [], LBRLabels = [], SLELabels = [],
-    GINAdmin2 = false, SLEAdmin2 = false, LBRAdmin2 = false,
+    guineaAdminLayer1, guineaAdminLayer2, liberiaAdminLayer1, liberiaAdminLayer2, sleAdminLayer1, sleAdminLayer2, ngrStateLayer, ngrLgaLayer,
+    GINLabels = [], LBRLabels = [], SLELabels = [], NGRLabels = [],
+    GINAdmin2 = false, SLEAdmin2 = false, LBRAdmin2 = false, NGRLga = false,
     country = '', country2 = '', country3 = '',
     btnAd
 
@@ -51,6 +51,7 @@ function adjustLayerbyZoom1(zoomGIN) {
         if (!GINAdmin2) {
             map.removeLayer(liberiaAdminLayer2)
             map.removeLayer(sleAdminLayer2)
+            map.removeLayer(ngrLgaLayer)
             map.addLayer(guineaAdminLayer2)
                 //Add labels to the Admin2
             for (var i = 0; i < GINLabels.length; i++) {
@@ -77,6 +78,7 @@ function adjustLayerbyZoom2(zoomLBR) {
         if (!LBRAdmin2) {
             map.removeLayer(guineaAdminLayer2)
             map.removeLayer(sleAdminLayer2)
+            map.removeLayer(ngrLgaLayer)
             map.addLayer(liberiaAdminLayer2)
                 //Add labels to the Admin2
             for (var i = 0; i < LBRLabels.length; i++) {
@@ -101,6 +103,7 @@ function adjustLayerbyZoom3(zoomSLE) {
         if (!SLEAdmin2) {
           map.removeLayer(liberiaAdminLayer2)
           map.removeLayer(guineaAdminLayer2)
+          map.removeLayer(ngrLgaLayer)
           map.addLayer(sleAdminLayer2)
                 //Add labels to the Admin2
             for (var i = 0; i < SLELabels.length; i++) {
@@ -119,6 +122,32 @@ function adjustLayerbyZoom3(zoomSLE) {
 
 }
 
+function adjustLayerbyZoom4(zoomNGR) {
+
+    if (zoomNGR > 8) {
+        if (!NGRLga) {
+          map.removeLayer(liberiaAdminLayer2)
+          map.removeLayer(guineaAdminLayer2)
+          map.removeLayer(sleAdminLayer2)
+          map.addLayer(ngrLgaLayer)
+                //Add labels to the Admin2
+            for (var i = 0; i < NGRLabels.length; i++) {
+                NGRLabels[i].addTo(map)
+            }
+            NGRLga = true
+        }
+    } else {
+        map.removeLayer(ngrLgaLayer)
+        for (var i = 0; i < NGRLabels.length; i++) {
+            map.removeLayer(NGRLabels[i])
+        }
+
+        NGRLga = false
+    }
+
+}
+
+
 
 function triggerUiUpdate() {
    /* getAdminLayers()*/
@@ -136,6 +165,7 @@ function triggerUiUpdate() {
         map.addLayer(guineaAdminLayer1)
         map.removeLayer(liberiaAdminLayer1)
         map.removeLayer(sleAdminLayer1)
+        map.removeLayer(ngrStateLayer)
         map.on('zoomend', function () {
           adjustLayerbyZoom1(map.getZoom())
         })
@@ -146,6 +176,7 @@ function triggerUiUpdate() {
         map.addLayer(liberiaAdminLayer1)
         map.removeLayer(guineaAdminLayer1)
         map.removeLayer(sleAdminLayer1)
+        map.removeLayer(ngrStateLayer)
         map.on('zoomend', function () {
           adjustLayerbyZoom2(map.getZoom())
         })
@@ -158,12 +189,24 @@ function triggerUiUpdate() {
         map.addLayer(sleAdminLayer1)
         map.removeLayer(guineaAdminLayer1)
         map.removeLayer(liberiaAdminLayer1)
+        map.removeLayer(ngrStateLayer)
         map.on('zoomend', function () {
           adjustLayerbyZoom3(map.getZoom())
         })
 
       }
 
+    if(countrySelect == "Nigeria") {
+        map.setView([10, 8], 6.5, {animation: true})
+        map.addLayer(ngrStateLayer)
+        map.removeLayer(guineaAdminLayer1)
+        map.removeLayer(liberiaAdminLayer1)
+        map.removeLayer(sleAdminLayer1)
+        map.on('zoomend', function () {
+          adjustLayerbyZoom4(map.getZoom())
+        })
+
+      }
 
     conflictScenario = $('#categoryScope').val()
     monthSelect = $('#monthScope').val()
@@ -246,6 +289,29 @@ function buildQuery(monthSelect, yearRange, conflictScenario) {
     }
 
     else query = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM liberia_conflict_data';
+  }
+
+}
+
+
+  else if(country == "Nigeria") {
+     query = 'http://ehealthafrica.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM conflict_and_security_data';
+  if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0){
+    query = query.concat(' WHERE')
+    if (conflictScenario.length > 0){
+      query = query.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
+      needsAnd = true
+    }
+    if (monthSelect.length > 0){
+      query = needsAnd  ? query.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  query.concat(" event_month = '".concat(monthSelect.concat("'")))
+      needsAnd = true
+    }
+
+    if (yearRange.length > 1){
+      query = needsAnd  ? query.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : query = query.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
+    }
+
+    else query = 'http://ehealthafrica.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM conflict_and_security_data';
   }
 
 }
@@ -394,6 +460,10 @@ function addAdminLayersToMap(layers) {
         style: layerStyles['admin1']
     })
 
+    ngrStateLayer = L.geoJson(layers['ngrAdmin1'], {
+        style: layerStyles['admin1']
+    })
+
     guineaAdminLayer2 = L.geoJson(layers['guineaAdmin2'], {
         style: layerStyles['admin2'],
         onEachFeature: function (feature, layer) {
@@ -436,6 +506,20 @@ function addAdminLayersToMap(layers) {
         }
     })
 
+
+    ngrLgaLayer = L.geoJson(layers['ngrAdmin2'], {
+    style: layerStyles['admin2'],
+    onEachFeature: function (feature, layer) {
+        var labelIcon = L.divIcon({
+            className: 'labelLga-icon',
+            html: feature.properties.LGAName
+        })
+        NGRLabels.push(L.marker(layer.getBounds().getCenter(), {
+                icon: labelIcon
+            }))
+
+    }
+    })
 }
 
 
@@ -456,7 +540,7 @@ function normalizeName(source) {
 
 function buildPopupContent(feature) {
     var subcontent = ''
-    var propertyNames = ['country','event_type', 'event_year', 'event_month', 'event_date', 'admin1', 'admin2', /*'admin3',*/ 'location', 'source', 'perpetrator', 'notes', 'fatalities', 'conflicts_scenario']
+    var propertyNames = ['country','event_type', 'event_year', 'event_month', 'event_date', 'country', 'admin1', 'admin2', 'state', 'lga','location', 'source', 'perpetrator', 'notes', 'fatalities', 'conflicts_scenario']
     for (var i = 0; i < propertyNames.length; i++) {
         subcontent = subcontent.concat('<p><strong>' + normalizeName(propertyNames[i]) + ': </strong>' + feature.properties[propertyNames[i]] + '</p>')
 
@@ -511,6 +595,13 @@ function getAdminLayers() {
             logError(null)
         })
 
+     $.get('resources/state_boundary.geojson', function (ngr_admin1) {
+        adminLayers['ngrAdmin1'] = JSON.parse(ngr_admin1)
+        addAdminLayersToMap(adminLayers)
+		}).fail(function () {
+            logError(null)
+        })
+
         $.get('resources/GIN_Admin2.geojson', function (guinea_admin2) {
         adminLayers['guineaAdmin2'] = JSON.parse(guinea_admin2)
         addAdminLayersToMap(adminLayers)
@@ -531,6 +622,14 @@ function getAdminLayers() {
 		}).fail(function () {
             logError(null)
         })
+
+        $.get('resources/lga_boundary.geojson', function (ngr_admin2) {
+        adminLayers['NGRLga'] = JSON.parse(ngr_admin2)
+        addAdminLayersToMap(adminLayers)
+		}).fail(function () {
+            logError(null)
+        })
+
 
 
 
@@ -718,9 +817,37 @@ function adjoiningCountry (monthSelect, yearRange, conflictScenario, country) {
   else if (country == "Sierra Leone") {
    queryAd = "http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ivory_coast_conflict_data WHERE country = 'Sierra Leone'";
 
-    alertSRL();
+
 
   }
+
+
+  else if(country == "Nigeria") {
+    queryAd = 'http://femtope.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM nigeria_adjoining';
+  if (monthSelect.length > 0 || yearRange.length > 0 || conflictScenario > 0 || country.length > 0){
+    queryAd = queryAd.concat(' WHERE')
+    if (conflictScenario.length > 0){
+      queryAd = queryAd.concat(" conflicts_scenario = '".concat(conflictScenario.concat("'")))
+      needsAnd = true
+    }
+    if (monthSelect.length > 0){
+      queryAd = needsAnd  ? queryAd.concat(" AND event_month = '".concat(monthSelect.concat("'"))) :  queryAd.concat(" event_month = '".concat(monthSelect.concat("'")))
+      needsAnd = true
+    }
+
+    if (yearRange.length > 1){
+      queryAd = needsAnd  ? queryAd.concat(" AND event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1]))) : queryAd = queryAd.concat(" event_year BETWEEN ".concat(yearRange[0]).concat(" AND ".concat(yearRange[1])))
+    }
+
+   if (country.length > 0){
+      queryAd = needsAnd  ? queryAd.concat(" AND country IN('Benin', 'Chad', 'Cameroon', 'Niger')") :  queryAd.concat(" AND country IN('Benin', 'Chad', 'Cameroon', 'Niger')")
+      needsAnd = true
+    }
+
+    }
+  }
+
+
   return queryAd
 
 }
@@ -752,12 +879,25 @@ function callAdjoining() {
 }
 
 function showBtn() {
-  if(country3.length > 0) {
-    btnAd = document.getElementById("btnAd");
-    btnAd.style.visibility = "visible"
+  btnAd = document.getElementById("btnAd");
+  if(country3 == "Nigeria") {
+      btnAd.style.visibility = "visible"
       /*btnAd.Visible = true*/
       console.log("Am Here:  ", country3)
     }
+  if (country3 == "Sierra Leone") {
+    btnAd.style.visibility = "hidden"
+    alertSRL();
+  }
+
+  if (country3 == "Liberia") {
+    btnAd.style.visibility = "visible"
+  }
+
+  if (country3 == "Guinea") {
+    btnAd.style.visibility = "visible"
+  }
+
   else if (country3 == "") {
     btnAd.style.visibility = "hidden"
   }
@@ -773,5 +913,5 @@ function clearData () {
 }
 
 function alertSRL () {
-  alert("There is no Adjoining Country Apart from the two involving Countries of Interest. Thanks!!!")
+  alert("There is no Adjoining Country Apart from the two involving Countries of Interest which are Guinea and Liberia. Thanks!!!")
 }
