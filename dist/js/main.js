@@ -191,7 +191,7 @@ function triggerUiUpdate() {
       }
 
     if(countrySelect == "Nigeria") {
-        map.setView([10, 8], 7, {animation: true})
+        map.setView([10, 8], 6, {animation: true})
         map.addLayer(ngrStateLayer)
         map.removeLayer(guineaAdminLayer1)
         map.removeLayer(liberiaAdminLayer1)
