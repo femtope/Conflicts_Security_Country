@@ -55,9 +55,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <nav class="navbar navbar-static-top" role="navigation">
 
             <a href="#" class="navbar-brand"><strong class="special-size"><b><b id="country"></b>Conflicts and Security </b> MAP
-              <div class="text-left logo_pad">
-                        <img src="resources/eHA_Logo.png" height="35" width="140">
-              </div></strong>
+              </strong>
             </a>
 
             <!-- Sidebar Toggle Button -->
@@ -69,64 +67,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 <!-- Navbar Right Menu -->
 
-
-
-              <div class="navbar-custom-menu">
+            <div class="navbar-custom-menu">
               <div class="alert alert-info sideColor">
-                    <h4 class="special-size1"><i class="icon fa fa-fire"></i>Conflicts Category</h4>
-                      <div class="form-group">
-                        <select id="categoryScope" onchange="triggerUiUpdate(); callAdjoining()" class="form-control">
-                            <option value="">All</option>
-                            <option value="Civil Conflicts">Civil Conflicts</option>
-                            <option value="Kidnapping/Abductions">Kidnapping/Abductions</option>
-                            <option value="Assassination/Homicide/Armed Robbery/Arm Assault">Assassination/Homicide/Armed Robbery/Arm Assault</option>
-                            <option value="Insurgency/Terrorists Attacks">Insurgency/Terrorists Attacks</option>
-                            <option value="Religious Conflicts">Religious Conflicts</option>
-                            <option value="Protests/Demonstrations">Protests/Demonstrations</option>
-                            <option value="Others">Others</option>
-                        </select>
-                    </div>
-                </div>
+
+               <div class="text-left logo_pad">
+                  <img src="resources/eHA_Logo.png" height="35" width="140">
               </div>
-
-              <div class="navbar-custom-menu">
-              <div class="alert alert-info sideColor">
-                <h4 class="special-size1"><i class="icon fa fa-calendar-check-o"></i>Year Ranges</h4>
-                  <div class="form-group">
-                    <!--<label for="amount"> Year Ranges: </label>-->
-                    <input type="text" id="amount" readonly style="border:1; color:#000000; font-weight:bold; text-align:center" onclick="triggerUIUpdate(); callAdjoining()">
-                  </div>
-                <div id="slider-range"></div>
-
-                </div>
-              </div>
-
-              <div class="navbar-custom-menu">
-                     <div class="alert alert-info sideColor">
-                        <h4 class="special-size1"><i class="icon fa fa-calendar-check-o"></i>Month </h4>
-                      <div class="form-group">
-                        <select id="monthScope" onchange="triggerUiUpdate(); callAdjoining()" class="form-control">
-                            <option value="">All</option>
-                            <option value="January">January</option>
-                            <option value="February">February</option>
-                            <option value="March">March</option>
-                            <option value="April">April</option>
-                            <option value="May">May</option>
-                            <option value="June">June</option>
-                            <option value="July">July</option>
-                            <option value="August">August</option>
-                            <option value="September">September</option>
-                            <option value="October">October</option>
-                            <option value="November">November</option>
-                            <option value="December">December</option>
-                        </select>
-                      </div>
-                  </div>
-                </div>
-            <div class="navbar-custom-menu" id="turnglobe">
-              <div class="alert alert-info sideColor">
-
-                <div id="worldmap"></div>
 
                 </div>
               </div>
@@ -144,23 +90,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           <section class="sidebar">
 
-                <div class="alert alert-info sidecolor">
-                  <div class="row">
-                      <h3 class="white text-center"></h3>
-                  </div>
-                  <div class="row">
-                      <h3 class="white text-center"></h3>
-                  </div>
-                  <div class="row">
-                      <h3 class="white text-center"></h3>
-                  </div>
-                <div class="text-center">
-                    <span class="info-box-text white">Currently Displaying:</span>
 
-                    <span class="info-box-number white"><b id="country2"></b><big id="projectCount">0</big> Conflict Issues</span>
-
-                </div>
-                  </div>
              <div class="alert alert-info sideColor">
                     <h4><i class="icon fa fa-globe"></i>Country of Interest</h4>
                     <div class="form-group">
@@ -179,7 +109,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
                  <!--<div class="white text-center" id="country"></div>-->
                 </div>
 
-                </div>
+
+                      <h4><i class="icon fa fa-calendar-check-o"></i>Month </h4>
+                      <div class="form-group">
+                        <select id="monthScope" onchange="triggerUiUpdate(); callAdjoining()" class="form-control">
+                            <option value="">All</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                      </div>
+
+                     <h4><i class="icon fa fa-fire"></i>Conflicts Category</h4>
+                      <div class="form-group">
+                        <select id="categoryScope" onchange="triggerUiUpdate(); callAdjoining()" class="form-control">
+                            <option value="">All</option>
+                            <option value="Civil Conflicts">Civil Conflicts</option>
+                            <option value="Kidnapping/Abductions">Kidnapping/Abductions</option>
+                            <option value="Assassination/Homicide/Armed Robbery/Arm Assault">Assassination/Homicide/Armed Robbery/Arm Assault</option>
+                            <option value="Insurgency/Terrorists Attacks">Insurgency/Terrorists Attacks</option>
+                            <option value="Religious Conflicts">Religious Conflicts</option>
+                            <option value="Protests/Demonstrations">Protests/Demonstrations</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+
+
+                 <h4><i class="icon fa fa-calendar-check-o"></i>Year Ranges</h4>
+                  <div class="form-group">
+                    <!--<label for="amount"> Year Ranges: </label>-->
+                    <input type="text" id="amount" readonly style="border:1; color:#000000; font-weight:bold; text-align:center" onclick="triggerUIUpdate(); callAdjoining()">
+                  </div>
+                <div id="slider-range"></div>
+
+                  </div>
           </section>
 
             <section class="sidebar">
@@ -265,6 +237,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
 
 
+              <div class="text-center">
+                    <span class="info-box-text white">Currently Displaying:</span>
+
+                    <span class="info-box-number white"><b id="country2"></b><big id="projectCount">0</big> Conflict Issues</span>
+
+                </div>
+
+              <!--<div class="navbar-custom-menu" id="turnglobe">
+              <div class="alert alert-info sideColor">
+
+                <div id="worldmap"></div>
+
+                </div>
+              </div>-->
             </section>
 
         </aside>
@@ -302,26 +288,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 </div>
                 </div>
-
-
             </section>
             <!-- /.content -->
         </div>
-        <!-- /.content-wrapper -->
 
-        <!-- Main Footer -->
         <footer class="main-footer">
             <!-- To the right -->
-            <div class="pull-right hidden-xs">
-                <!--<span><img src="resources/eha-logo.png" alt="eHEalth Africa Logo"/></span>-->
+               <div class="pull-right">
+              <span><strong>Copyright &copy; 2016 <a target="_blank" href="http://ehealthafrica.org">eHealth Africa</a>.</strong> All rights reserved.</span>
             </div>
-            <!-- Default to the left -->
-            <strong>Copyright &copy; 2015 <a target="_blank" href="http://ehealthafrica.org">eHealth Africa</a>.</strong> All rights reserved.
         </footer>
-
         <!-- jQuery 2.1.4 -->
-
-
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <script src="http://d3js.org/topojson.v1.min.js"></script>
         <script src="dist/js/globe.js"></script>
@@ -335,13 +312,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <script src="plugins/leaflet/leaflet.js"></script>
         <script src="dist/js/main.js"></script>
         <script src="plugins/MarkerCluster/leaflet.markercluster-src.js"></script>
-
         <!-- JQuery Slider -->
         <script src="dist/js/jquery-ui.js"></script>
         <script src="dist/js/slider.js"></script>
-
-
-
     </div>
 </body>
 

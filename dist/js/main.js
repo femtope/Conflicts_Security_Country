@@ -21,12 +21,6 @@ var map = L.map('map', {
 });
 
 
-/*map.on('zoomend', function () {
-    adjustLayerbyZoom1(map.getZoom())
-    adjustLayerbyZoom2(map.getZoom())
-    adjustLayerbyZoom3(map.getZoom())
-})*/
-
 //'https://maps.nlp.nokia.com/maptiler/v2/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=eng&token=61YWYROufLu_f8ylE0vn0Q&app_id=qIWDkliFCtLntLma2e6O'
 //'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -124,7 +118,7 @@ function adjustLayerbyZoom3(zoomSLE) {
 
 function adjustLayerbyZoom4(zoomNGR) {
 
-    if (zoomNGR > 8) {
+    if (zoomNGR > 9) {
         if (!NGRLga) {
           map.removeLayer(liberiaAdminLayer2)
           map.removeLayer(guineaAdminLayer2)
@@ -197,7 +191,7 @@ function triggerUiUpdate() {
       }
 
     if(countrySelect == "Nigeria") {
-        map.setView([10, 8], 6.5, {animation: true})
+        map.setView([10, 8], 7, {animation: true})
         map.addLayer(ngrStateLayer)
         map.removeLayer(guineaAdminLayer1)
         map.removeLayer(liberiaAdminLayer1)
