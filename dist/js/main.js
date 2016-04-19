@@ -909,3 +909,24 @@ function clearData () {
 function alertSRL () {
   alert("There is no Adjoining Country Apart from the two involving Countries of Interest which are Guinea and Liberia. Thanks!!!")
 }
+
+
+function toggle(btnAd){
+  if(btnAd.value =="Adjoining Country(ies) Off")
+    {
+      callAdjoining();
+      btnAd.value="Adjoining Country(ies) On"
+
+    }
+  else
+    {
+      clearData();
+      btnAd.value="Adjoining Country(ies) Off"
+    }
+}
+
+function toggle1(){
+    if(btnAd.value == "Adjoining Country(ies) On"){
+       btnAd.value="Adjoining Country(ies) Off"
+    }
+}

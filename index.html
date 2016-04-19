@@ -88,14 +88,14 @@
 
 
                <div class="btnAd">
-                  <input id="btnAd" type="button" class="special-size2"  value="Adjoining Country(ies)" readonly style="border:1; color:#000000; font-weight:bold; text-align:center; visibility:hidden" onclick="callAdjoining()">
+                  <input id="btnAd" type="button" class="special-size2"  value="Adjoining Country(ies) Off" readonly style="border:1; color:#000000; font-weight:bold; text-align:center; visibility:hidden" onclick="toggle(this)">
                  <!--<div class="white text-center" id="country"></div>-->
                 </div>
 
 
                       <h4><i class="icon fa fa-calendar-check-o"></i>Month </h4>
                       <div class="form-group">
-                        <select id="monthScope" onchange="triggerUiUpdate(); callAdjoining()" class="form-control">
+                        <select id="monthScope" onchange="triggerUiUpdate(); clearData(); toggle1()" class="form-control">
                             <option value="">All</option>
                             <option value="January">January</option>
                             <option value="February">February</option>
@@ -114,7 +114,7 @@
 
                      <h4><i class="icon fa fa-fire"></i>Conflicts Category</h4>
                       <div class="form-group">
-                        <select id="categoryScope" onchange="triggerUiUpdate(); callAdjoining()" class="form-control">
+                        <select id="categoryScope" onchange="triggerUiUpdate(); clearData(); toggle1()" class="form-control">
                             <option value="">All</option>
                             <option value="Civil Conflicts">Civil Conflicts</option>
                             <option value="Kidnapping/Abductions">Kidnapping/Abductions</option>
@@ -130,7 +130,7 @@
                  <h4><i class="icon fa fa-calendar-check-o"></i>Year Ranges</h4>
                   <div class="form-group">
                     <!--<label for="amount"> Year Ranges: </label>-->
-                    <input type="text" id="amount" readonly style="border:1; color:#000000; font-weight:bold; text-align:center" onclick="triggerUIUpdate(); callAdjoining()">
+                    <input type="text" id="amount" readonly style="border:1; color:#000000; font-weight:bold; text-align:center" onclick="triggerUIUpdate(); clearData(); toggle1()">
                   </div>
                 <div id="slider-range"></div>
 
